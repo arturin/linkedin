@@ -44,6 +44,24 @@ module LinkedIn
         v2_post(path, MultiJson.dump(share_payload(urn, share)))
       end
 
+      # Delete share for the authenticated user
+      #
+      # Permissions: w_member_share
+      #
+      # @see https://docs.microsoft.com/en-us/linkedin/marketing/integrations/community-management/shares/ugc-post-api#delete-ugc-posts
+      #
+      # @param [String] urn   Shares's URN (UID)
+      #
+      # @return [void]
+      def v2_delete_share(urn)
+        if !urn.instance_of?(String) || urn.empty?
+          raise LinkedIn::Errors::UnavailableError, 'LinkedIn API: URN required'
+        end
+
+        path = "/ugcPosts/#{CGI.escape(urn)}"
+        v2_remove(path)
+      end
+
       # Request an image updload URL for the authenticated user
       #
       # Permissions: w_member_share

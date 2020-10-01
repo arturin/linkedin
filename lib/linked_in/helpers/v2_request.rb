@@ -36,6 +36,12 @@ module LinkedIn
           response
         end
 
+        def v2_remove(path)
+          response = access_token.delete("#{API_PATH}#{path}", headers: DEFAULT_HEADERS)
+          raise_errors(response)
+          response
+        end
+
       private
 
         def raise_errors(response)
