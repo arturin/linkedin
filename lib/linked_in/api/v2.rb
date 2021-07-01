@@ -160,6 +160,7 @@ module LinkedIn
           payload
         end
 
+        # @param [String] thumbnail_urls URLs of images that will be used in article preview
         def add_url_to_payload(payload, share)
           media = { status: 'READY', originalUrl: share[:url] }
           if share[:description]
@@ -167,6 +168,9 @@ module LinkedIn
           end
           if share[:title]
             media[:title] = { text: share[:title] }
+          end
+          if share[:thumbnail_url]
+            media[:thumbnails] = [{ url: share[:thumbnail_url] }]
           end
 
           payload[:specificContent]['com.linkedin.ugc.ShareContent'][:shareMediaCategory] = 'ARTICLE'
