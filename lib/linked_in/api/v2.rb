@@ -122,7 +122,7 @@ module LinkedIn
           }
 
           return add_url_to_payload(payload, share) if share[:url]
-          return add_image_to_payload(payload, share) if share[:image]
+          return add_images_to_payload(payload, share) if share[:images]
 
           payload
         end
@@ -144,17 +144,18 @@ module LinkedIn
           }
         end
 
-        def add_image_to_payload(payload, share)
-          media = { status: 'READY', media: share[:image] }
-          if share[:description]
-            media[:description] = { text: share[:description] }
-          end
-          if share[:title]
-            media[:title] = { text: share[:title] }
+        def add_images_to_payload(payload, share)
+          media = share[:images].map do |image|
+            {
+              status: 'READY',
+              media: image,
+              description: { text: share[:description].to_s },
+              title: { text: share[:title].to_s }
+            }
           end
 
           payload[:specificContent]['com.linkedin.ugc.ShareContent'][:shareMediaCategory] = 'IMAGE'
-          payload[:specificContent]['com.linkedin.ugc.ShareContent'][:media] = [media]
+          payload[:specificContent]['com.linkedin.ugc.ShareContent'][:media] = media
 
           payload
         end
